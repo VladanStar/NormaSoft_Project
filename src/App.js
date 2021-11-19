@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect, useState, useMemo } from "react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  const [postsDogs, setPostsDogs] = useState([]);
+  const postProvider = useMemo(
+    () => ({
+      postsDogs,
+      setPostsDogs,
+    }),
+    [postsDogs, setPostsDogs]
   );
+
+  useEffect(() => {
+    // fetching posts for feed
+    const fetchPosts = async () => {
+      fetch("https://dummyapi.io/data/v1/post", {
+        headers: {
+          "app-id": "616ddd0c2a8ff6018ca5b17d",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPostsDogs(data.data);
+        });
+    };
+
+    fetchPosts();
+  }, []);
+  return <div className="App"></div>;
 }
 
 export default App;
